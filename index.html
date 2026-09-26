@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>我有话想对你说</title>
+<title>拾光信箱 · 日常寄思</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box;
       font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; }
@@ -162,6 +162,7 @@
     transition:0.2s; min-height:44px;
     display:flex; align-items:center; justify-content:center;
     font-weight:400; line-height:1.5;
+    white-space:pre-wrap; word-break:break-word;
   }
   @media (max-width:600px) {
     .mailbox-card { padding:30px 20px; border-radius:36px; }
@@ -208,12 +209,12 @@
     </div>
   </div>
 
-  <div class="title"><span>♥</span> 我有话想对你说</div>
+  <div class="title"><span>📮</span> 拾光信箱</div>
 
   <div class="form-grid">
     <div class="field">
       <label><i>💬</i> 称呼（CN）</label>
-      <input type="text" id="cnInput" placeholder="例如：小星、阿澈、亲爱的…" value="宝宝">
+      <input type="text" id="cnInput" placeholder="例如：小星、阿澈、亲爱的…" value="亲爱的">
     </div>
 
     <div class="field hidden" id="fieldPrompt">
@@ -228,12 +229,12 @@
 
     <div class="field hidden" id="fieldExperience">
       <label><i>📸</i> 你们一起的经历</label>
-      <textarea id="experienceInput" placeholder="这里填写你们的经历"></textarea>
+      <textarea id="experienceInput" placeholder="例如：去年夏天一起在海边看日落…"></textarea>
     </div>
 
     <div class="field hidden" id="fieldExtra">
       <label><i>📎</i> 补充</label>
-      <textarea id="extraInput" placeholder="其他补充"></textarea>
+      <textarea id="extraInput" placeholder="例如：记得提醒TA吃早餐…"></textarea>
     </div>
 
     <div class="field">
@@ -242,8 +243,8 @@
     </div>
   </div>
 
-  <button class="send-btn" id="sendBtn"><span>✉️</span> 取出信件</button>
-  <div class="status-message" id="statusMsg">填写信息后，点击收取信件</div>
+  <button class="send-btn" id="sendBtn"><span>✉️</span> 寄出这封信</button>
+  <div class="status-message" id="statusMsg">填写信息，点击寄出</div>
 </div>
 
 <script>
@@ -256,7 +257,7 @@
   const CLOUD_FUNCTION_URL = 'https://1496219729-bciv7ujji9o.ap-chengdu.tencentscf.com';
 
   /* ============================================================
-     ② 内置 LLM API（混淆存储）
+     ② 内置 LLM API
      ============================================================ */
   const _p1 = 'sk-1t31Ttg0Q4YwhLwwIyiR';
   const _p2 = 'DLCJFJdpZjqskmYOPEMkcmr1yyRo';
@@ -265,13 +266,13 @@
   const BUILTIN_MODEL   = '[福利]gemini-3-flash-preview';
 
   /* ============================================================
-     ③ 默认提示词 / 人设 / 经历 / 补充
+     ③ 默认内容（日常向）
      ============================================================ */
-  const DEFAULT_PROMPT = `请以「秦梧」的身份，给心爱的人写一封中秋祝福的信。
-信要真诚、温暖，带着一点撒娇和思念。
-语气自然，像真实的人写给爱人的信，禁止使用模板。
-请记住，对方是你的爱人，不可以说出任何让对方伤心的话。
-落款写「秦梧」，也可以加一句只有你们之间才懂的小昵称或小暗号。`;
+  const DEFAULT_PROMPT = `请以「秦梧」的身份，给心爱的人写一封日常邮件。
+某一天忽然想TA了，或者遇到一件有趣的小事想分享给TA。
+信的内容自然、日常、有生活感——比如今天上课时想到你、路上看到什么有趣的、看了某集宫斗剧想吐槽。
+语气温柔、带着一点撒娇和思念。
+落款写「秦梧」。`;
 
   const DEFAULT_PERSONA = `姓名：秦梧
 性别：男
@@ -288,37 +289,33 @@
 一起经历过很多平凡却温暖的瞬间：一起看过月亮，一起吐槽过宫斗剧，一起吃过爆辣面包片。
 对方知道秦梧嘴硬心软，知道他害怕蟑螂却死不承认，也知道他其实很会撒娇。`;
 
-  const DEFAULT_EXTRA = `今天是普通的一天，像往常一样。因为对对方的思念，所以写下了这封信。`;
+  const DEFAULT_EXTRA = `没什么特别的，就是忽然想写封信给你。
+今天也要好好吃饭、早点休息呀。`;
 
   /* ============================================================
      ④ DOM
      ============================================================ */
   const settingsBtn   = document.getElementById('settingsBtn');
   const settingsPanel = document.getElementById('settingsPanel');
-
   const togglePrompt     = document.getElementById('togglePrompt');
   const togglePersona    = document.getElementById('togglePersona');
   const toggleExperience = document.getElementById('toggleExperience');
   const toggleExtra      = document.getElementById('toggleExtra');
   const toggleCustomApi  = document.getElementById('toggleCustomApi');
-
   const fieldPrompt     = document.getElementById('fieldPrompt');
   const fieldPersona    = document.getElementById('fieldPersona');
   const fieldExperience = document.getElementById('fieldExperience');
   const fieldExtra      = document.getElementById('fieldExtra');
   const apiFields       = document.getElementById('apiFields');
-
   const cnInput         = document.getElementById('cnInput');
   const promptInput     = document.getElementById('promptInput');
   const personaInput    = document.getElementById('personaInput');
   const experienceInput = document.getElementById('experienceInput');
   const extraInput      = document.getElementById('extraInput');
   const emailInput      = document.getElementById('emailInput');
-
   const apiUrlInput   = document.getElementById('apiUrlInput');
   const apiKeyInput   = document.getElementById('apiKeyInput');
   const apiModelInput = document.getElementById('apiModelInput');
-
   const sendBtn   = document.getElementById('sendBtn');
   const statusMsg = document.getElementById('statusMsg');
 
@@ -326,26 +323,18 @@
      ⑤ 状态
      ============================================================ */
   const state = {
-    prompt: false,
-    persona: false,
-    experience: false,
-    extra: false,
-    customApi: false
+    prompt: false, persona: false, experience: false, extra: false, customApi: false
   };
 
   function updateVisibility() {
     togglePrompt.classList.toggle('active', state.prompt);
     fieldPrompt.classList.toggle('hidden', !state.prompt);
-
     togglePersona.classList.toggle('active', state.persona);
     fieldPersona.classList.toggle('hidden', !state.persona);
-
     toggleExperience.classList.toggle('active', state.experience);
     fieldExperience.classList.toggle('hidden', !state.experience);
-
     toggleExtra.classList.toggle('active', state.extra);
     fieldExtra.classList.toggle('hidden', !state.extra);
-
     toggleCustomApi.classList.toggle('active', state.customApi);
     apiFields.classList.toggle('show', state.customApi);
   }
@@ -387,7 +376,6 @@
      ============================================================ */
   function buildFinalPrompt() {
     const cn = cnInput.value.trim() || '亲爱的';
-
     const promptText     = (state.prompt     && promptInput.value.trim())     ? promptInput.value.trim()     : DEFAULT_PROMPT;
     const personaText    = (state.persona    && personaInput.value.trim())    ? personaInput.value.trim()    : DEFAULT_PERSONA;
     const experienceText = (state.experience && experienceInput.value.trim()) ? experienceInput.value.trim() : DEFAULT_EXPERIENCE;
@@ -463,62 +451,71 @@ ${extraText}
   }
 
   /* ============================================================
-     ⑧ 调腾讯云函数发信
+     ⑧ 调腾讯云函数发信（带详细调试）
      ============================================================ */
   async function sendMail(receiverEmail, letterContent) {
-    const resp = await fetch(CLOUD_FUNCTION_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        to: receiverEmail,
-        subject: '致你',
-        content: letterContent,
-        role: '秦梧'
-      })
-    });
+    let resp;
+    try {
+      resp = await fetch(CLOUD_FUNCTION_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          to: receiverEmail,
+          subject: '来自秦梧的信',
+          content: letterContent,
+          role: '秦梧'
+        })
+      });
+    } catch (fetchErr) {
+      throw new Error(`【连接云函数失败】${fetchErr.message}（可能是跨域/DNS/网络问题）`);
+    }
+
+    statusMsg.textContent = `📡 云函数已响应（HTTP ${resp.status}），正在读取…`;
+
+    const respText = await resp.text();
 
     if (!resp.ok) {
-      const errText = await resp.text().catch(() => '');
-      throw new Error(`云函数返回 ${resp.status}：${errText.slice(0, 200)}`);
+      throw new Error(`【云函数返回 ${resp.status}】${respText.slice(0, 300)}`);
     }
-    return await resp.json();
+
+    try {
+      const json = JSON.parse(respText);
+      if (json.error) throw new Error(`【云函数内部错误】${json.error}`);
+      return json;
+    } catch (jsonErr) {
+      if (jsonErr.message.startsWith('【')) throw jsonErr;
+      throw new Error(`【云函数返回非JSON】${respText.slice(0, 200)}`);
+    }
   }
 
   /* ============================================================
-     ⑨ 主流程
+     ⑨ 主流程（带步骤提示）
      ============================================================ */
   async function handleSend() {
     const email = emailInput.value.trim();
     const cn    = cnInput.value.trim();
 
-    if (!cn) {
-      statusMsg.textContent = '💬 请填写称呼（CN）';
-      return;
-    }
-    if (!email) {
-      statusMsg.textContent = '📧 请填写接收邮件地址';
-      return;
-    }
+    if (!cn) { statusMsg.textContent = '💬 请填写称呼（CN）'; return; }
+    if (!email) { statusMsg.textContent = '📧 请填写接收邮件地址'; return; }
     if (!email.includes('@') || !email.includes('.')) {
-      statusMsg.textContent = '📧 邮箱格式好像不太对哦';
-      return;
+      statusMsg.textContent = '📧 邮箱格式好像不太对哦'; return;
     }
 
     sendBtn.disabled = true;
-    statusMsg.textContent = '✍️ 正在写信…';
+    statusMsg.textContent = '【步骤1/3】✍️ 正在写信…';
 
     try {
       const letter = await generateLetter();
       console.log('【生成的信件】\n', letter);
+      statusMsg.textContent = '【步骤2/3】✉️ 信件已生成，正在连接云函数…';
 
-      statusMsg.textContent = '✉️ 正在寄出…';
       const result = await sendMail(email, letter);
       console.log('【云函数返回】', result);
 
-      statusMsg.textContent = `✅ 信件已寄往 ${email}，请查收~`;
+      statusMsg.textContent = `✅ 信件已寄往 ${email}，请查收 ✨`;
     } catch (err) {
-      console.error(err);
-      statusMsg.textContent = `❌ ${err.message || '寄信失败，请稍后重试'}`;
+      console.error('【完整错误】', err);
+      statusMsg.textContent = `❌ ${err.message || '寄信失败'}`;
     } finally {
       sendBtn.disabled = false;
     }
