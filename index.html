@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>拾光信箱 · 日常寄思</title>
+<title>要怎么描述爱</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box;
       font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; }
@@ -36,14 +36,13 @@
   .settings-btn:hover {
     background:#fff; color:#2f2a26;
     transform:rotate(15deg) scale(1.03);
-    box-shadow:0 10px 20px -8px rgba(0,0,0,0.2);
   }
   .settings-panel {
     position:absolute; top:90px; right:32px; width:300px;
     background:rgba(255,255,255,0.97);
     backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
     border-radius:28px; padding:22px 20px;
-    box-shadow:0 20px 40px -12px rgba(0,0,0,0.25),0 4px 12px rgba(0,0,0,0.05);
+    box-shadow:0 20px 40px -12px rgba(0,0,0,0.25);
     border:1px solid rgba(255,255,255,0.8);
     transform-origin:top right;
     transition:all 0.25s cubic-bezier(0.2,0.9,0.4,1);
@@ -53,13 +52,12 @@
   .settings-panel.open { opacity:1; visibility:visible; pointer-events:auto; transform:scale(1); }
   .settings-panel h4 {
     font-size:16px; font-weight:600; color:#3e362f;
-    letter-spacing:0.3px; margin-bottom:16px;
-    padding-left:12px; border-left:3px solid #d9c7b6;
+    margin-bottom:16px; padding-left:12px;
+    border-left:3px solid #d9c7b6;
   }
   .settings-panel h5 {
     font-size:13px; font-weight:600; color:#8a7a6c;
-    margin:18px 0 10px 6px; letter-spacing:0.5px;
-    text-transform:uppercase;
+    margin:18px 0 10px 6px;
   }
   .switch-row {
     display:flex; align-items:center; justify-content:space-between;
@@ -70,13 +68,12 @@
   .switch-label { font-size:14px; font-weight:500; color:#4a4038; }
   .switch-label small {
     display:block; font-size:11px; font-weight:400;
-    color:#a99f96; margin-top:2px; letter-spacing:0.2px;
+    color:#a99f96; margin-top:2px;
   }
   .toggle {
     width:44px; height:26px; background:#e2d9d1;
     border-radius:40px; position:relative;
     transition:0.2s; flex-shrink:0;
-    box-shadow:inset 0 1px 4px rgba(0,0,0,0.05);
   }
   .toggle::after {
     content:''; position:absolute; top:3px; left:3px;
@@ -97,16 +94,11 @@
     border:1.5px solid rgba(210,190,170,0.4);
     background:rgba(255,255,255,0.8);
     font-size:13px; color:#2e2722; outline:none;
-    transition:0.2s; font-family:inherit;
+    font-family:inherit;
   }
-  .api-fields input:focus {
-    border-color:#c1a68b; background:#fff;
-    box-shadow:0 4px 12px -4px rgba(165,130,100,0.3);
-  }
-  .api-fields input::placeholder { color:#b8aea6; font-size:12px; }
   .title {
     font-size:32px; font-weight:600; color:#3b322b;
-    letter-spacing:-0.5px; display:flex; align-items:center;
+    display:flex; align-items:center;
     gap:8px; margin-bottom:28px; margin-top:8px;
   }
   .form-grid { display:flex; flex-direction:column; gap:22px; }
@@ -114,7 +106,7 @@
   .field.hidden { display:none; }
   .field label {
     font-size:14px; font-weight:500; color:#5d5248;
-    letter-spacing:0.2px; display:flex; align-items:center;
+    display:flex; align-items:center;
     gap:6px; padding-left:4px;
   }
   .field label i { font-style:normal; font-size:18px; opacity:0.8; }
@@ -123,59 +115,46 @@
     border-radius:24px;
     border:1.5px solid rgba(210,190,170,0.4);
     background:rgba(255,255,255,0.7);
-    backdrop-filter:blur(8px);
     font-size:15px; color:#2e2722; outline:none;
-    transition:0.2s; resize:vertical; font-family:inherit;
-    box-shadow:0 2px 8px rgba(0,0,0,0.02);
+    resize:vertical; font-family:inherit;
   }
   .field input:focus, .field textarea:focus {
     border-color:#c1a68b; background:#fff;
-    box-shadow:0 8px 20px -8px rgba(165,130,100,0.3);
   }
   .field textarea { min-height:90px; max-height:180px; }
   .field input::placeholder, .field textarea::placeholder {
-    color:#b8aea6; font-weight:400; font-size:14px;
+    color:#b8aea6; font-size:14px;
   }
   .send-btn {
     margin-top:30px; background:#b8a28b; border:none;
     border-radius:40px; padding:18px 24px;
     font-size:17px; font-weight:600; color:#fff;
-    letter-spacing:0.5px; display:flex;
-    align-items:center; justify-content:center; gap:10px;
+    display:flex; align-items:center; justify-content:center; gap:10px;
     cursor:pointer; transition:all 0.25s;
     box-shadow:0 12px 28px -10px rgba(130,100,75,0.4);
     width:100%; border:1px solid rgba(255,255,255,0.2);
   }
-  .send-btn:hover:not(:disabled) {
-    background:#a8917a; transform:scale(1.01);
-    box-shadow:0 18px 32px -10px rgba(110,80,55,0.5);
-  }
-  .send-btn:active:not(:disabled) { transform:scale(0.99); }
-  .send-btn:disabled {
-    background:#d9cdc1; box-shadow:none;
-    transform:none; cursor:not-allowed; opacity:0.7;
-  }
+  .send-btn:hover:not(:disabled) { background:#a8917a; transform:scale(1.01); }
+  .send-btn:disabled { background:#d9cdc1; cursor:not-allowed; opacity:0.7; }
   .status-message {
     text-align:center; font-size:14px; margin-top:18px;
     padding:12px 18px; border-radius:30px;
     color:#5b4e44; background:rgba(255,250,240,0.7);
-    transition:0.2s; min-height:44px;
+    min-height:44px;
     display:flex; align-items:center; justify-content:center;
-    font-weight:400; line-height:1.5;
-    white-space:pre-wrap; word-break:break-word;
+    line-height:1.5; white-space:pre-wrap; word-break:break-word;
   }
   @media (max-width:600px) {
     .mailbox-card { padding:30px 20px; border-radius:36px; }
     .settings-btn { top:20px; right:20px; width:44px; height:44px; font-size:22px; }
     .settings-panel { top:74px; right:16px; width:calc(100% - 32px); max-width:320px; }
     .title { font-size:26px; margin-bottom:20px; }
-    .field input, .field textarea { padding:12px 16px; }
   }
 </style>
 </head>
 <body>
 <div class="mailbox-card">
-  <div class="settings-btn" id="settingsBtn" aria-label="设置">⚙️</div>
+  <div class="settings-btn" id="settingsBtn">⚙️</div>
 
   <div class="settings-panel" id="settingsPanel">
     <h4>自定义选项</h4>
@@ -205,46 +184,43 @@
     <div class="api-fields" id="apiFields">
       <input type="text" id="apiUrlInput" placeholder="API地址（如 https://xxx/v1）">
       <input type="text" id="apiKeyInput" placeholder="API密钥">
-      <input type="text" id="apiModelInput" placeholder="模型名（如 gpt-4o-mini）">
+      <input type="text" id="apiModelInput" placeholder="模型名">
     </div>
   </div>
 
-  <div class="title"><span>📮</span> 拾光信箱</div>
+  <div class="title"><span>🍀</span> 以春为信</div>
 
   <div class="form-grid">
     <div class="field">
-      <label><i>💬</i> 称呼（CN）</label>
-      <input type="text" id="cnInput" placeholder="例如：小星、阿澈、亲爱的…" value="亲爱的">
+      <label><i>✦</i> 称呼/CN</label>
+      <input type="text" id="cnInput" placeholder="例：宝宝、亲爱的…" value="">
     </div>
 
     <div class="field hidden" id="fieldPrompt">
       <label><i>✨</i> 提示词</label>
-      <textarea id="promptInput" placeholder="例如：请用温柔、诗意的语气写一封信…"></textarea>
+      <textarea id="promptInput"></textarea>
     </div>
-
     <div class="field hidden" id="fieldPersona">
       <label><i>🎭</i> 角色人设</label>
-      <textarea id="personaInput" placeholder="描述写信人的性格、身份…"></textarea>
+      <textarea id="personaInput"></textarea>
     </div>
-
     <div class="field hidden" id="fieldExperience">
       <label><i>📸</i> 你们一起的经历</label>
-      <textarea id="experienceInput" placeholder="例如：去年夏天一起在海边看日落…"></textarea>
+      <textarea id="experienceInput"></textarea>
     </div>
-
     <div class="field hidden" id="fieldExtra">
       <label><i>📎</i> 补充</label>
-      <textarea id="extraInput" placeholder="例如：记得提醒TA吃早餐…"></textarea>
+      <textarea id="extraInput"></textarea>
     </div>
 
     <div class="field">
-      <label><i>📧</i> 接收邮件地址（您将收到这封信）</label>
-      <input type="email" id="emailInput" placeholder="your@qq.com" value="">
+      <label><i>✦</i> 接收邮件地址</label>
+      <input type="email" id="emailInput" placeholder="your@qq.com">
     </div>
   </div>
 
-  <button class="send-btn" id="sendBtn"><span>✉️</span> 寄出这封信</button>
-  <div class="status-message" id="statusMsg">填写信息，点击寄出</div>
+  <button class="send-btn" id="sendBtn"><span>✉️</span> 打开信箱</button>
+  <div class="status-message" id="statusMsg">点击收取邮件</div>
 </div>
 
 <script>
@@ -252,9 +228,9 @@
   'use strict';
 
   /* ============================================================
-     ① 腾讯云函数地址
+     ① 云函数地址
      ============================================================ */
-  const CLOUD_FUNCTION_URL = 'https://1496219729-bciv7ujji9o.ap-chengdu.tencentscf.com';
+  const CLOUD_FUNCTION_URL = 'https://1496219729-bciv7uji9o.ap-chengdu.tencentscf.com';
 
   /* ============================================================
      ② 内置 LLM API
@@ -270,7 +246,7 @@
      ============================================================ */
   const DEFAULT_PROMPT = `请以「秦梧」的身份，给心爱的人写一封日常邮件。
 某一天忽然想TA了，或者遇到一件有趣的小事想分享给TA。
-信的内容自然、日常、有生活感——比如今天上课时想到你、路上看到什么有趣的、看了某集宫斗剧想吐槽。
+信的内容自然、日常、有生活感。
 语气温柔、带着一点撒娇和思念。
 落款写「秦梧」。`;
 
@@ -279,7 +255,7 @@
 年龄：24岁
 身高：182cm
 身份：大学物理老师，捉鬼师
-性格：温柔开朗，有一点腹黑属性，吐槽役。三观极正。非典型回避型，意识到自己喜欢对方后也会主动示好，会和喜欢的人亲近但害怕自己无法做到最好而不敢确认关系。不会说脏话，但依然可以凭借语言把对面骂破防。像不息的太阳。ENFJ。存在阴暗的一面但被自己死死压在心底，永远不会伤害对方。
+性格：温柔开朗，有一点腹黑属性，吐槽役。三观极正。非典型回避型，意识到自己喜欢对方后也会主动示好，会和喜欢的人亲近但害怕自己无法做到最好而不敢确认关系。不会说脏话，但依然可以凭借语言把对面骂破防。像不息的太阳。ENFJ。
 样貌：浅灰色短发浅灰瞳孔，左耳下有一根长度到肩膀的红绳耳坠，其中缀着翡翠玉石，右侧留了一撮与耳坠差不多长的头发。没有纹身。
 喜好：喜欢看宫斗剧，喜欢打篮球，爱吃辣，每天早上会去买爆辣面包片。害怕蟑螂但不承认。对游戏兴趣一般，抽卡运气极好但不充钱。
 说话习惯：经常使用语气词（如"呀""喔"）。说话时使用"我"自称。喜欢撒娇，喜欢发"🥺"表情包，但如果对方打直球会害羞到说不出完整的话。
@@ -444,14 +420,12 @@ ${extraText}
 
     const data = await resp.json();
     const content = data?.choices?.[0]?.message?.content;
-    if (!content) {
-      throw new Error('LLM返回内容为空');
-    }
+    if (!content) throw new Error('LLM返回内容为空');
     return content.trim();
   }
 
   /* ============================================================
-     ⑧ 调腾讯云函数发信（带详细调试）
+     ⑧ 调腾讯云函数发信
      ============================================================ */
   async function sendMail(receiverEmail, letterContent) {
     let resp;
@@ -471,7 +445,6 @@ ${extraText}
     }
 
     statusMsg.textContent = `📡 云函数已响应（HTTP ${resp.status}），正在读取…`;
-
     const respText = await resp.text();
 
     if (!resp.ok) {
@@ -489,7 +462,7 @@ ${extraText}
   }
 
   /* ============================================================
-     ⑨ 主流程（带步骤提示）
+     ⑨ 主流程
      ============================================================ */
   async function handleSend() {
     const email = emailInput.value.trim();
@@ -526,7 +499,7 @@ ${extraText}
     if (e.key === 'Enter') { e.preventDefault(); handleSend(); }
   });
 
-  statusMsg.textContent = '填写信息，点击寄出';
+  statusMsg.textContent = '点击收取邮件';
 })();
 </script>
 </body>
